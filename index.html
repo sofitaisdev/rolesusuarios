@@ -8,342 +8,150 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0d0f12;
-            --surface: #13161b;
-            --surface2: #1a1e25;
-            --border: #252a33;
-            --border-hover: #363e4d;
-            --text: #e8ecf0;
-            --text-2: #8892a0;
-            --text-3: #555f6e;
+            --bg: #f4f6f9;
+            --surface: #ffffff;
+            --surface2: #f8fafc;
+            --border: #e2e8f0;
+            --border-hover: #c8d4e0;
+            --text: #0f172a;
+            --text-2: #475569;
+            --text-3: #94a3b8;
             --accent: #8b0000;
-            --accent-hover: #a30000;
-            --accent-glow: rgba(139,0,0,0.15);
-            --green: #22c55e;
-            --red: #ef4444;
+            --accent-hover: #6b0000;
+            --accent-glow: rgba(139,0,0,0.08);
+            --green: #16a34a;
+            --red: #dc2626;
             --radius: 10px;
             --mono: 'DM Mono', monospace;
+            --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+            --shadow-md: 0 4px 16px rgba(0,0,0,.08);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            padding: 32px 24px;
-        }
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 32px 24px; }
 
-        /* Header */
-        .header {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            margin-bottom: 28px;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-        .header-left h1 {
-            font-size: 22px;
-            font-weight: 600;
-            letter-spacing: -0.3px;
-        }
-        .header-left p {
-            font-size: 13px;
-            color: var(--text-3);
-            margin-top: 3px;
-        }
+        .header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+        .header-left h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.3px; }
+        .header-left p { font-size: 13px; color: var(--text-3); margin-top: 3px; }
+        .header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
-        /* Stats row */
-        .stats {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-        .stat {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            color: var(--text-2);
-            transition: border-color .2s;
-        }
-        .stat:hover { border-color: var(--border-hover); }
+        .stats { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+        .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 16px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-2); box-shadow: var(--shadow); }
         .stat strong { color: var(--text); font-weight: 600; font-size: 15px; }
         .stat-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 
-        /* Toolbar */
-        .toolbar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .search-wrap {
-            position: relative;
-            flex: 1;
-            min-width: 200px;
-            max-width: 320px;
-        }
-        .search-wrap svg {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-3);
-            pointer-events: none;
-        }
-        input[type="text"], input[type="email"], input[type="password"], select {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            color: var(--text);
-            font-family: 'DM Sans', sans-serif;
-            font-size: 14px;
-            padding: 9px 12px;
-            outline: none;
-            transition: border-color .15s, box-shadow .15s;
-            width: 100%;
-        }
-        input[type="text"]:focus, input[type="email"]:focus,
-        input[type="password"]:focus, select:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-glow);
-        }
-        .search-wrap input { padding-left: 36px; }
-        select { cursor: pointer; }
-        select option { background: var(--surface2); }
+        .toolbar { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+        .search-wrap { position: relative; flex: 1; min-width: 200px; max-width: 320px; }
+        .search-wrap svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--text-3); pointer-events: none; }
 
-        /* Buttons */
-        .btn {
-            border: none;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 13px;
-            font-weight: 500;
-            padding: 9px 16px;
-            transition: all .15s;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
+        input[type="text"], input[type="email"], input[type="password"], select {
+            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+            color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px;
+            padding: 9px 12px; outline: none; width: 100%;
+            transition: border-color .15s, box-shadow .15s;
         }
-        .btn-primary {
-            background: var(--accent);
-            color: #fff;
-        }
-        .btn-primary:hover { background: var(--accent-hover); box-shadow: 0 0 16px var(--accent-glow); }
-        .btn-ghost {
-            background: transparent;
-            color: var(--text-2);
-            border: 1px solid var(--border);
-        }
-        .btn-ghost:hover { border-color: var(--border-hover); color: var(--text); }
-        .btn-icon {
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            color: var(--text-2);
-            padding: 6px 10px;
-            font-size: 14px;
-        }
+        input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+        input:disabled { background: var(--surface2); color: var(--text-3); cursor: not-allowed; }
+        .search-wrap input { padding-left: 34px; }
+        select { cursor: pointer; }
+
+        .btn { border: none; border-radius: var(--radius); cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; padding: 9px 15px; transition: all .15s; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+        .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 1px 2px rgba(139,0,0,.2); }
+        .btn-primary:hover { background: var(--accent-hover); }
+        .btn-secondary { background: var(--surface); color: var(--text-2); border: 1px solid var(--border); box-shadow: var(--shadow); }
+        .btn-secondary:hover { border-color: var(--border-hover); color: var(--text); }
+        .btn-icon { background: var(--surface); border: 1px solid var(--border); color: var(--text-2); padding: 6px 10px; font-size: 14px; box-shadow: var(--shadow); }
         .btn-icon:hover { border-color: var(--border-hover); color: var(--text); }
-        .btn-icon.danger:hover { border-color: var(--red); color: var(--red); background: rgba(239,68,68,0.08); }
+        .btn-icon.danger:hover { border-color: var(--red); color: var(--red); background: #fff1f1; }
         .btn:disabled { opacity: .5; cursor: not-allowed; }
 
-        /* Table */
-        .table-wrap {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            overflow: hidden;
-        }
+        .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
         table { width: 100%; border-collapse: collapse; }
-        thead tr {
-            border-bottom: 1px solid var(--border);
-        }
-        th {
-            padding: 11px 16px;
-            text-align: left;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: .06em;
-            color: var(--text-3);
-        }
-        td {
-            padding: 13px 16px;
-            font-size: 13.5px;
-            border-bottom: 1px solid var(--border);
-            vertical-align: middle;
-        }
+        thead tr { border-bottom: 1px solid var(--border); background: var(--surface2); }
+        th { padding: 10px 16px; text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-3); }
+        td { padding: 12px 16px; font-size: 13.5px; border-bottom: 1px solid var(--border); vertical-align: middle; }
         tbody tr:last-child td { border-bottom: none; }
         tbody tr { transition: background .1s; }
-        tbody tr:hover { background: var(--surface2); }
-
-        .email-cell {
-            font-family: var(--mono);
-            font-size: 12.5px;
-            color: var(--text-2);
-        }
-        .muted { color: var(--text-3); font-size: 13px; }
+        tbody tr:hover { background: #fafbfc; }
+        .email-cell { font-family: var(--mono); font-size: 12.5px; color: var(--text-2); }
+        .muted { color: var(--text-3); }
         .actions { display: flex; gap: 6px; }
 
-        /* Role badges */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: .03em;
-            border: 1px solid transparent;
-        }
+        .badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: .03em; border: 1px solid transparent; }
         .badge-dot { width: 6px; height: 6px; border-radius: 50%; }
-        .badge-diamond { background: rgba(59,130,246,.1); color: #60a5fa; border-color: rgba(59,130,246,.2); }
-        .badge-black   { background: rgba(255,255,255,.06); color: #cbd5e1; border-color: rgba(255,255,255,.1); }
-        .badge-platino { background: rgba(139,92,246,.1); color: #a78bfa; border-color: rgba(139,92,246,.2); }
-        .badge-ruby    { background: rgba(239,68,68,.1); color: #f87171; border-color: rgba(239,68,68,.2); }
-        .badge-gold    { background: rgba(234,179,8,.1); color: #fbbf24; border-color: rgba(234,179,8,.2); }
-        .badge-guest   { background: rgba(100,116,139,.1); color: #94a3b8; border-color: rgba(100,116,139,.2); }
-
-        .dot-diamond { background: #60a5fa; }
-        .dot-black   { background: #cbd5e1; }
-        .dot-platino { background: #a78bfa; }
-        .dot-ruby    { background: #f87171; }
-        .dot-gold    { background: #fbbf24; }
+        .badge-diamond { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+        .badge-black   { background: #1e293b; color: #e2e8f0; border-color: #334155; }
+        .badge-platino { background: #f5f3ff; color: #6d28d9; border-color: #ddd6fe; }
+        .badge-ruby    { background: #fff1f2; color: #be123c; border-color: #fecdd3; }
+        .badge-gold    { background: #fffbeb; color: #92400e; border-color: #fde68a; }
+        .badge-guest   { background: #f8fafc; color: #64748b; border-color: #e2e8f0; }
+        .dot-diamond { background: #3b82f6; }
+        .dot-black   { background: #94a3b8; }
+        .dot-platino { background: #8b5cf6; }
+        .dot-ruby    { background: #f43f5e; }
+        .dot-gold    { background: #f59e0b; }
         .dot-guest   { background: #94a3b8; }
 
-        /* Empty state */
-        .empty {
-            padding: 60px 20px;
-            text-align: center;
-            color: var(--text-3);
-        }
-        .empty svg { margin-bottom: 12px; opacity: .4; }
+        .empty { padding: 56px 20px; text-align: center; color: var(--text-3); }
+        .empty svg { margin-bottom: 12px; opacity: .3; }
         .empty p { font-size: 14px; }
 
         /* Modal */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,.7);
-            backdrop-filter: blur(4px);
-            z-index: 100;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,.4); backdrop-filter: blur(4px); z-index: 100; justify-content: center; align-items: center; padding: 20px; }
         .modal-overlay.active { display: flex; }
-        .modal {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            width: 100%;
-            max-width: 480px;
-            padding: 28px;
-            animation: slideUp .2s ease;
-            box-shadow: 0 24px 64px rgba(0,0,0,.5);
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(12px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
+        .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; width: 100%; max-width: 500px; padding: 28px; animation: slideUp .2s ease; box-shadow: var(--shadow-md); }
+        @keyframes slideUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
         .modal-header h2 { font-size: 16px; font-weight: 600; }
-        .btn-close {
-            background: none; border: none; cursor: pointer;
-            color: var(--text-3); padding: 4px; border-radius: 6px;
-            transition: color .15s;
-        }
+        .btn-close { background: none; border: none; cursor: pointer; color: var(--text-3); padding: 4px; border-radius: 6px; transition: color .15s; }
         .btn-close:hover { color: var(--text); }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
         .form-group { display: flex; flex-direction: column; gap: 6px; }
         .form-group.full { grid-column: 1 / -1; }
-        .form-group label {
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--text-2);
-            text-transform: uppercase;
-            letter-spacing: .05em;
-        }
-        .modal-error {
-            background: rgba(239,68,68,.1);
-            border: 1px solid rgba(239,68,68,.25);
-            border-radius: 8px;
-            color: #f87171;
-            font-size: 13px;
-            padding: 10px 14px;
-            margin-bottom: 16px;
-            display: none;
-        }
-        .modal-footer {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-            margin-top: 24px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border);
-        }
+        .form-group label { font-size: 12px; font-weight: 500; color: var(--text-2); text-transform: uppercase; letter-spacing: .05em; }
+        .modal-error { background: #fff1f1; border: 1px solid #fecaca; border-radius: 8px; color: var(--red); font-size: 13px; padding: 10px 14px; margin-bottom: 14px; display: none; }
+        .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border); }
 
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            padding: 12px 18px;
-            border-radius: 10px;
-            font-size: 13.5px;
-            font-weight: 500;
-            z-index: 999;
-            display: none;
-            align-items: center;
-            gap: 8px;
-            border: 1px solid transparent;
-            animation: toastIn .2s ease;
-            box-shadow: 0 8px 24px rgba(0,0,0,.4);
+        /* Bulk upload panel */
+        .bulk-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 18px; box-shadow: var(--shadow); display: none; }
+        .bulk-panel.visible { display: block; animation: slideUp .2s ease; }
+        .bulk-panel h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+        .bulk-panel p { font-size: 13px; color: var(--text-2); margin-bottom: 14px; }
+        .drop-zone {
+            border: 2px dashed var(--border); border-radius: var(--radius);
+            padding: 32px; text-align: center; cursor: pointer;
+            transition: border-color .15s, background .15s;
+            position: relative;
         }
-        @keyframes toastIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-        .toast.success { background: rgba(34,197,94,.1); border-color: rgba(34,197,94,.25); color: #4ade80; display: flex; }
-        .toast.error   { background: rgba(239,68,68,.1);  border-color: rgba(239,68,68,.25);  color: #f87171; display: flex; }
-
-        /* Loading skeleton */
-        .skeleton td { padding: 14px 16px; }
-        .skel {
-            background: linear-gradient(90deg, var(--surface2) 25%, var(--border) 50%, var(--surface2) 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            border-radius: 6px;
-            height: 14px;
-        }
-        @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+        .drop-zone:hover, .drop-zone.drag-over { border-color: var(--accent); background: var(--accent-glow); }
+        .drop-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+        .drop-zone svg { color: var(--text-3); margin-bottom: 8px; }
+        .drop-zone p { margin-bottom: 0; color: var(--text-3); font-size: 13px; }
+        .drop-zone strong { color: var(--accent); }
+        .bulk-preview { margin-top: 16px; }
+        .bulk-preview table { font-size: 12.5px; }
+        .bulk-preview th { font-size: 10px; }
+        .bulk-preview td { padding: 8px 12px; }
+        .bulk-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px; flex-wrap: wrap; align-items: center; }
+        .bulk-info { font-size: 12px; color: var(--text-3); margin-right: auto; }
+        .progress-bar { height: 4px; background: var(--border); border-radius: 2px; margin-top: 12px; overflow: hidden; display: none; }
+        .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width .3s; width: 0%; }
+        .row-status { font-size: 11px; font-family: var(--mono); }
+        .row-ok    { color: var(--green); }
+        .row-err   { color: var(--red); }
+        .row-wait  { color: var(--text-3); }
 
         /* Count badge */
-        .count-badge {
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            color: var(--text-3);
-            font-size: 11px;
-            padding: 2px 8px;
-            border-radius: 20px;
-            font-family: var(--mono);
-        }
+        .count-badge { background: var(--surface2); border: 1px solid var(--border); color: var(--text-3); font-size: 11px; padding: 3px 10px; border-radius: 20px; font-family: var(--mono); }
+
+        /* Skeleton */
+        .skel { background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 6px; height: 13px; }
+        @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+        /* Toast */
+        .toast { position: fixed; bottom: 24px; right: 24px; padding: 11px 16px; border-radius: 10px; font-size: 13.5px; font-weight: 500; z-index: 999; display: none; align-items: center; gap: 8px; border: 1px solid transparent; animation: toastIn .2s ease; box-shadow: var(--shadow-md); }
+        @keyframes toastIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+        .toast.success { background: #f0fdf4; border-color: #bbf7d0; color: #15803d; display: flex; }
+        .toast.error   { background: #fff1f2; border-color: #fecdd3; color: var(--red); display: flex; }
     </style>
 </head>
 <body>
@@ -353,19 +161,51 @@
         <h1>Gestión de Usuarios</h1>
         <p>Administrá accesos y roles del sistema</p>
     </div>
-    <button class="btn btn-primary" id="btn-nuevo">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Nuevo usuario
-    </button>
+    <div class="header-actions">
+        <button class="btn btn-secondary" id="btn-bulk-toggle">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Carga masiva
+        </button>
+        <button class="btn btn-primary" id="btn-nuevo">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Nuevo usuario
+        </button>
+    </div>
 </div>
 
 <div class="stats" id="stats">
-    <div class="stat"><div class="skel" style="width:80px;height:12px;"></div></div>
+    <div class="stat"><div class="skel" style="width:90px"></div></div>
+</div>
+
+<!-- Bulk upload panel -->
+<div id="bulk-panel" class="bulk-panel">
+    <h3>Carga masiva de usuarios</h3>
+    <p>Subí un CSV con columnas: <code style="font-family:var(--mono);font-size:12px;background:#f1f5f9;padding:2px 6px;border-radius:4px;">email,password,nombre,cargo,empresa,cuit,rol</code> — las columnas opcionales pueden estar vacías. Los usuarios con email ya registrado serán ignorados.</p>
+    <div class="drop-zone" id="drop-zone">
+        <input type="file" id="csv-file" accept=".csv">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+        <p><strong>Elegí un archivo</strong> o arrastralo acá</p>
+        <p style="margin-top:4px;font-size:12px;">Solo archivos .csv</p>
+    </div>
+    <div id="bulk-preview" class="bulk-preview" style="display:none;">
+        <div class="table-wrap" style="max-height:220px;overflow-y:auto;">
+            <table><thead><tr id="bulk-thead"></tr></thead><tbody id="bulk-tbody"></tbody></table>
+        </div>
+        <div class="progress-bar" id="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        <div class="bulk-actions">
+            <span class="bulk-info" id="bulk-info"></span>
+            <button class="btn btn-secondary" id="btn-bulk-clear">Limpiar</button>
+            <button class="btn btn-primary" id="btn-bulk-import">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Importar
+            </button>
+        </div>
+    </div>
 </div>
 
 <div class="toolbar">
     <div class="search-wrap">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         <input type="text" id="search" placeholder="Buscar por email o nombre…">
     </div>
     <select id="filter-rol" style="width:auto;flex-shrink:0;">
@@ -383,59 +223,33 @@
 <div class="table-wrap">
     <table>
         <thead>
-            <tr>
-                <th>Email</th>
-                <th>Rol</th>
-                <th>Nombre</th>
-                <th>Empresa</th>
-                <th>Cargo</th>
-                <th>CUIT</th>
-                <th></th>
-            </tr>
+            <tr><th>Email</th><th>Rol</th><th>Nombre</th><th>Empresa</th><th>Cargo</th><th>CUIT</th><th></th></tr>
         </thead>
         <tbody id="tbl-body">
-            <tr class="skeleton"><td><div class="skel" style="width:180px"></div></td><td><div class="skel" style="width:60px"></div></td><td><div class="skel" style="width:120px"></div></td><td><div class="skel" style="width:100px"></div></td><td><div class="skel" style="width:80px"></div></td><td><div class="skel" style="width:90px"></div></td><td></td></tr>
-            <tr class="skeleton"><td><div class="skel" style="width:200px"></div></td><td><div class="skel" style="width:55px"></div></td><td><div class="skel" style="width:100px"></div></td><td><div class="skel" style="width:110px"></div></td><td><div class="skel" style="width:90px"></div></td><td><div class="skel" style="width:85px"></div></td><td></td></tr>
-            <tr class="skeleton"><td><div class="skel" style="width:160px"></div></td><td><div class="skel" style="width:70px"></div></td><td><div class="skel" style="width:130px"></div></td><td><div class="skel" style="width:95px"></div></td><td><div class="skel" style="width:75px"></div></td><td><div class="skel" style="width:92px"></div></td><td></td></tr>
+            <tr><td><div class="skel" style="width:180px"></div></td><td><div class="skel" style="width:60px"></div></td><td><div class="skel" style="width:120px"></div></td><td><div class="skel" style="width:100px"></div></td><td><div class="skel" style="width:80px"></div></td><td><div class="skel" style="width:90px"></div></td><td></td></tr>
+            <tr><td><div class="skel" style="width:200px"></div></td><td><div class="skel" style="width:55px"></div></td><td><div class="skel" style="width:100px"></div></td><td><div class="skel" style="width:110px"></div></td><td><div class="skel" style="width:90px"></div></td><td><div class="skel" style="width:85px"></div></td><td></td></tr>
+            <tr><td><div class="skel" style="width:160px"></div></td><td><div class="skel" style="width:70px"></div></td><td><div class="skel" style="width:130px"></div></td><td><div class="skel" style="width:95px"></div></td><td><div class="skel" style="width:75px"></div></td><td><div class="skel" style="width:92px"></div></td><td></td></tr>
         </tbody>
     </table>
 </div>
 
-<!-- Modal -->
+<!-- Modal individual -->
 <div id="modal-overlay" class="modal-overlay">
     <div class="modal">
         <div class="modal-header">
             <h2 id="modal-title">Nuevo usuario</h2>
-            <button class="btn-close" id="btn-close-x" title="Cerrar">
+            <button class="btn-close" id="btn-close-x">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
             </button>
         </div>
         <div id="modal-error" class="modal-error"></div>
         <div class="form-grid">
-            <div class="form-group full">
-                <label>Email *</label>
-                <input type="email" id="f-email" placeholder="usuario@empresa.com">
-            </div>
-            <div class="form-group full">
-                <label>Contraseña <span id="pass-label">*</span></label>
-                <input type="password" id="f-pass" placeholder="Mínimo 6 caracteres">
-            </div>
-            <div class="form-group">
-                <label>Nombre</label>
-                <input type="text" id="f-nombre" placeholder="Nombre completo">
-            </div>
-            <div class="form-group">
-                <label>Cargo</label>
-                <input type="text" id="f-cargo" placeholder="Ej: Gerente">
-            </div>
-            <div class="form-group">
-                <label>Empresa</label>
-                <input type="text" id="f-empresa" placeholder="Nombre de empresa">
-            </div>
-            <div class="form-group">
-                <label>CUIT</label>
-                <input type="text" id="f-cuit" placeholder="XX-XXXXXXXX-X">
-            </div>
+            <div class="form-group full"><label>Email *</label><input type="email" id="f-email" placeholder="usuario@empresa.com"></div>
+            <div class="form-group full"><label>Contraseña <span id="pass-label">*</span></label><input type="password" id="f-pass" placeholder="Mínimo 6 caracteres"></div>
+            <div class="form-group"><label>Nombre</label><input type="text" id="f-nombre" placeholder="Nombre completo"></div>
+            <div class="form-group"><label>Cargo</label><input type="text" id="f-cargo" placeholder="Ej: Gerente"></div>
+            <div class="form-group"><label>Empresa</label><input type="text" id="f-empresa" placeholder="Nombre de empresa"></div>
+            <div class="form-group"><label>CUIT</label><input type="text" id="f-cuit" placeholder="XX-XXXXXXXX-X"></div>
             <div class="form-group full">
                 <label>Rol *</label>
                 <select id="f-rol">
@@ -449,7 +263,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-ghost" id="btn-cancel">Cancelar</button>
+            <button class="btn btn-secondary" id="btn-cancel">Cancelar</button>
             <button class="btn btn-primary" id="btn-save">Guardar</button>
         </div>
     </div>
@@ -459,15 +273,13 @@
 
 <script>
 const SB_URL = "https://mywtmrwjzwpwkctixnzi.supabase.co";
-const SB_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15d3Rtcndqendwd2tjdGl4bnppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5NTQ4NDYsImV4cCI6MjA4NzUzMDg0Nn0.jdA2J-YUuRqnqj5-4l7yxGn_VoOX6C5Jwvn7k4l_ZgA";
 const SB_SVC = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15d3Rtcndqendwd2tjdGl4bnppIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MTk1NDg0NiwiZXhwIjoyMDg3NTMwODQ2fQ.KRa4rUTrfR5uLUEVisRlw_S93ZT-F4lmdBPDzlRW3jY";
 const HEADERS_SVC = { apikey: SB_SVC, Authorization: `Bearer ${SB_SVC}`, 'Content-Type': 'application/json' };
 
-let allUsers = [];
-let editingId = null;
-
+let allUsers = [], editingId = null, bulkRows = [];
 const ROLES = { diamond:'Diamond', black:'Black', platino:'Platinum', ruby:'Ruby', gold:'Gold', guest:'Guest' };
-const ROLE_DOTS = { diamond:'#60a5fa', black:'#cbd5e1', platino:'#a78bfa', ruby:'#f87171', gold:'#fbbf24', guest:'#94a3b8' };
+const ROLE_DOTS = { diamond:'#3b82f6', black:'#64748b', platino:'#8b5cf6', ruby:'#f43f5e', gold:'#f59e0b', guest:'#94a3b8' };
+const VALID_ROLES = Object.keys(ROLES);
 
 let toastTimer;
 function showToast(msg, type='success') {
@@ -482,28 +294,19 @@ function showToast(msg, type='success') {
 }
 
 async function loadUsers() {
-    try {
-        const res = await fetch(`${SB_URL}/rest/v1/usuarios?select=*`, { headers: HEADERS_SVC });
-        const data = await res.json();
-        allUsers = Array.isArray(data) ? data : [];
-        updateStats();
-        renderTable();
-    } catch(err) {
-        showToast('Error al cargar: ' + err.message, 'error');
-    }
+    const res = await fetch(`${SB_URL}/rest/v1/usuarios?select=*`, { headers: HEADERS_SVC });
+    allUsers = await res.json();
+    if (!Array.isArray(allUsers)) allUsers = [];
+    updateStats(); renderTable();
 }
 
 function updateStats() {
     const counts = { diamond:0, black:0, platino:0, ruby:0, gold:0, guest:0 };
-    for (const u of allUsers) {
-        const r = (u.rol || 'guest').toLowerCase();
-        if (counts[r] !== undefined) counts[r]++; else counts.guest++;
-    }
+    for (const u of allUsers) { const r=(u.rol||'guest').toLowerCase(); if(counts[r]!==undefined)counts[r]++;else counts.guest++; }
     document.getElementById('stats').innerHTML =
-        `<div class="stat"><strong>${allUsers.length}</strong> usuarios</div>` +
-        Object.entries(ROLES).map(([k,l]) => counts[k] > 0
-            ? `<div class="stat"><div class="stat-dot" style="background:${ROLE_DOTS[k]}"></div><strong>${counts[k]}</strong> ${l}</div>`
-            : ''
+        `<div class="stat"><strong>${allUsers.length}</strong> usuarios en total</div>` +
+        Object.entries(ROLES).map(([k,l]) => counts[k]>0
+            ? `<div class="stat"><div class="stat-dot" style="background:${ROLE_DOTS[k]}"></div><strong>${counts[k]}</strong> ${l}</div>` : ''
         ).join('');
 }
 
@@ -511,27 +314,25 @@ function renderTable() {
     const search = document.getElementById('search').value.toLowerCase();
     const filterRol = document.getElementById('filter-rol').value;
     const filtered = allUsers.filter(u => {
-        const m = !search || (u.email||'').toLowerCase().includes(search) || (u.nombre||'').toLowerCase().includes(search);
-        const r = !filterRol || (u.rol||'guest').toLowerCase() === filterRol;
-        return m && r;
+        const ms = !search || (u.email||'').toLowerCase().includes(search) || (u.nombre||'').toLowerCase().includes(search);
+        const mr = !filterRol || (u.rol||'guest').toLowerCase() === filterRol;
+        return ms && mr;
     });
-    document.getElementById('count-badge').textContent = `${filtered.length} resultado${filtered.length !== 1 ? 's' : ''}`;
+    document.getElementById('count-badge').textContent = `${filtered.length} resultado${filtered.length!==1?'s':''}`;
     const tbody = document.getElementById('tbl-body');
     if (!filtered.length) {
-        tbody.innerHTML = `<tr><td colspan="7"><div class="empty">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-            <p>No se encontraron usuarios</p></div></td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7"><div class="empty"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><p>No se encontraron usuarios</p></div></td></tr>`;
         return;
     }
     tbody.innerHTML = filtered.map(u => {
-        const rol = (u.rol || 'guest').toLowerCase();
+        const rol = (u.rol||'guest').toLowerCase();
         return `<tr>
             <td class="email-cell">${esc(u.email)}</td>
             <td><span class="badge badge-${rol}"><span class="badge-dot dot-${rol}"></span>${ROLES[rol]||'Guest'}</span></td>
-            <td>${u.nombre ? esc(u.nombre) : '<span class="muted">—</span>'}</td>
-            <td>${u.empresa ? esc(u.empresa) : '<span class="muted">—</span>'}</td>
-            <td>${u.cargo ? esc(u.cargo) : '<span class="muted">—</span>'}</td>
-            <td class="email-cell" style="font-size:12px;">${u.cuit ? esc(u.cuit) : '<span class="muted">—</span>'}</td>
+            <td>${u.nombre?esc(u.nombre):'<span class="muted">—</span>'}</td>
+            <td>${u.empresa?esc(u.empresa):'<span class="muted">—</span>'}</td>
+            <td>${u.cargo?esc(u.cargo):'<span class="muted">—</span>'}</td>
+            <td class="email-cell" style="font-size:12px;">${u.cuit?esc(u.cuit):'<span class="muted">—</span>'}</td>
             <td><div class="actions">
                 <button class="btn btn-icon" onclick="editUser('${u.id}')" title="Editar">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
@@ -546,9 +347,10 @@ function renderTable() {
 
 function esc(s) {
     if (!s) return '';
-    return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    return String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 }
 
+// ── MODAL INDIVIDUAL ─────────────────────────────────────────────
 function openModal() { document.getElementById('modal-overlay').classList.add('active'); }
 function closeModal() {
     document.getElementById('modal-overlay').classList.remove('active');
@@ -563,8 +365,7 @@ function closeModal() {
 }
 
 window.editUser = function(id) {
-    const u = allUsers.find(x => x.id === id);
-    if (!u) return;
+    const u = allUsers.find(x => x.id === id); if (!u) return;
     editingId = id;
     document.getElementById('modal-title').textContent = 'Editar usuario';
     document.getElementById('pass-label').textContent = '(opcional)';
@@ -583,17 +384,16 @@ window.editUser = function(id) {
 window.deleteUser = async function(id, email) {
     if (!confirm(`¿Eliminar a ${email}? Esta acción no se puede deshacer.`)) return;
     try {
-        await fetch(`${SB_URL}/auth/v1/admin/users/${id}`, { method: 'DELETE', headers: HEADERS_SVC });
-        await fetch(`${SB_URL}/rest/v1/usuarios?id=eq.${id}`, { method: 'DELETE', headers: HEADERS_SVC });
-        showToast('Usuario eliminado');
-        await loadUsers();
-    } catch(err) { showToast('Error al eliminar: ' + err.message, 'error'); }
+        await fetch(`${SB_URL}/auth/v1/admin/users/${id}`, { method:'DELETE', headers: HEADERS_SVC });
+        await fetch(`${SB_URL}/rest/v1/usuarios?id=eq.${id}`, { method:'DELETE', headers: HEADERS_SVC });
+        showToast('Usuario eliminado'); await loadUsers();
+    } catch(e) { showToast('Error al eliminar: '+e.message,'error'); }
 };
 
 document.getElementById('btn-nuevo').onclick = () => { closeModal(); openModal(); };
 document.getElementById('btn-cancel').onclick = closeModal;
 document.getElementById('btn-close-x').onclick = closeModal;
-document.getElementById('modal-overlay').onclick = e => { if (e.target === document.getElementById('modal-overlay')) closeModal(); };
+document.getElementById('modal-overlay').onclick = e => { if(e.target===document.getElementById('modal-overlay'))closeModal(); };
 document.getElementById('search').oninput = renderTable;
 document.getElementById('filter-rol').onchange = renderTable;
 
@@ -602,62 +402,143 @@ document.getElementById('btn-save').onclick = async function() {
     const pass  = document.getElementById('f-pass').value;
     const payload = {
         rol:     document.getElementById('f-rol').value,
-        nombre:  document.getElementById('f-nombre').value.trim() || null,
-        cargo:   document.getElementById('f-cargo').value.trim() || null,
-        empresa: document.getElementById('f-empresa').value.trim() || null,
-        cuit:    document.getElementById('f-cuit').value.trim() || null,
+        nombre:  document.getElementById('f-nombre').value.trim()||null,
+        cargo:   document.getElementById('f-cargo').value.trim()||null,
+        empresa: document.getElementById('f-empresa').value.trim()||null,
+        cuit:    document.getElementById('f-cuit').value.trim()||null,
     };
     const err = document.getElementById('modal-error');
     err.style.display = 'none';
-
-    if (!editingId && !email) { err.textContent = 'El email es obligatorio'; err.style.display = 'block'; return; }
-    if (!editingId && !pass)  { err.textContent = 'La contraseña es obligatoria'; err.style.display = 'block'; return; }
-    if (pass && pass.length < 6) { err.textContent = 'La contraseña debe tener al menos 6 caracteres'; err.style.display = 'block'; return; }
-
-    const btn = this;
-    btn.disabled = true;
-    btn.textContent = 'Guardando…';
-
+    if (!editingId && !email) { err.textContent='El email es obligatorio'; err.style.display='block'; return; }
+    if (!editingId && !pass)  { err.textContent='La contraseña es obligatoria'; err.style.display='block'; return; }
+    if (pass && pass.length<6){ err.textContent='Mínimo 6 caracteres'; err.style.display='block'; return; }
+    const btn = this; btn.disabled=true; btn.textContent='Guardando…';
     try {
         if (!editingId) {
-            const authRes = await fetch(`${SB_URL}/auth/v1/admin/users`, {
-                method: 'POST', headers: HEADERS_SVC,
-                body: JSON.stringify({ email, password: pass, email_confirm: true })
-            });
-            if (!authRes.ok) throw new Error(await authRes.text());
-            const authData = await authRes.json();
-            payload.id = authData.id;
-            payload.email = email;
-            const ins = await fetch(`${SB_URL}/rest/v1/usuarios`, {
-                method: 'POST',
-                headers: { ...HEADERS_SVC, Prefer: 'return=minimal' },
-                body: JSON.stringify(payload)
-            });
-            if (!ins.ok) throw new Error(await ins.text());
+            const ar = await fetch(`${SB_URL}/auth/v1/admin/users`,{method:'POST',headers:HEADERS_SVC,body:JSON.stringify({email,password:pass,email_confirm:true})});
+            if(!ar.ok) throw new Error(await ar.text());
+            const ad = await ar.json();
+            payload.id = ad.id; payload.email = email;
+            const ir = await fetch(`${SB_URL}/rest/v1/usuarios`,{method:'POST',headers:{...HEADERS_SVC,Prefer:'return=minimal'},body:JSON.stringify(payload)});
+            if(!ir.ok) throw new Error(await ir.text());
             showToast(`Usuario ${email} creado`);
         } else {
-            const upd = await fetch(`${SB_URL}/rest/v1/usuarios?id=eq.${editingId}`, {
-                method: 'PATCH',
-                headers: { ...HEADERS_SVC, Prefer: 'return=minimal' },
-                body: JSON.stringify(payload)
-            });
-            if (!upd.ok) throw new Error(await upd.text());
-            if (pass) {
-                await fetch(`${SB_URL}/auth/v1/admin/users/${editingId}`, {
-                    method: 'PUT', headers: HEADERS_SVC,
-                    body: JSON.stringify({ password: pass })
-                });
-            }
+            const ur = await fetch(`${SB_URL}/rest/v1/usuarios?id=eq.${editingId}`,{method:'PATCH',headers:{...HEADERS_SVC,Prefer:'return=minimal'},body:JSON.stringify(payload)});
+            if(!ur.ok) throw new Error(await ur.text());
+            if(pass){ await fetch(`${SB_URL}/auth/v1/admin/users/${editingId}`,{method:'PUT',headers:HEADERS_SVC,body:JSON.stringify({password:pass})}); }
             showToast('Usuario actualizado');
         }
-        closeModal();
-        await loadUsers();
-    } catch(e) {
-        err.textContent = e.message;
-        err.style.display = 'block';
+        closeModal(); await loadUsers();
+    } catch(e) { err.textContent=e.message; err.style.display='block'; }
+    btn.disabled=false; btn.textContent='Guardar';
+};
+
+// ── CARGA MASIVA ─────────────────────────────────────────────────
+document.getElementById('btn-bulk-toggle').onclick = () => {
+    const p = document.getElementById('bulk-panel');
+    p.classList.toggle('visible');
+};
+
+function parseCSV(text) {
+    const lines = text.trim().split(/\r?\n/);
+    if (lines.length < 2) return [];
+    const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/^"|"$/g,''));
+    return lines.slice(1).map(line => {
+        const vals = line.match(/(".*?"|[^,]+|(?<=,)(?=,)|^(?=,)|(?<=,)$)/g) || [];
+        const row = {};
+        headers.forEach((h, i) => { row[h] = (vals[i]||'').replace(/^"|"$/g,'').trim(); });
+        return row;
+    }).filter(r => r.email);
+}
+
+function renderBulkPreview(rows) {
+    const cols = ['email','password','nombre','cargo','empresa','cuit','rol','_status'];
+    document.getElementById('bulk-thead').innerHTML = cols.map(c =>
+        `<th>${c === '_status' ? 'Estado' : c}</th>`
+    ).join('');
+    document.getElementById('bulk-tbody').innerHTML = rows.map((r,i) => `<tr id="bulk-row-${i}">
+        <td class="email-cell">${esc(r.email||'')}</td>
+        <td class="muted" style="font-size:12px;">${r.password ? '••••••' : '<em>vacío</em>'}</td>
+        <td>${esc(r.nombre||'')}</td>
+        <td>${esc(r.cargo||'')}</td>
+        <td>${esc(r.empresa||'')}</td>
+        <td class="email-cell" style="font-size:12px;">${esc(r.cuit||'')}</td>
+        <td><span class="badge badge-${VALID_ROLES.includes((r.rol||'').toLowerCase())?(r.rol||'gold').toLowerCase():'gold'}">${ROLES[(r.rol||'').toLowerCase()]||'Gold'}</span></td>
+        <td><span class="row-status row-wait" id="status-${i}">En espera</span></td>
+    </tr>`).join('');
+    document.getElementById('bulk-info').textContent = `${rows.length} usuario${rows.length!==1?'s':''} listos para importar`;
+    document.getElementById('bulk-preview').style.display = 'block';
+}
+
+document.getElementById('csv-file').onchange = function() {
+    const file = this.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+        bulkRows = parseCSV(e.target.result);
+        if (!bulkRows.length) { showToast('El CSV no tiene filas válidas','error'); return; }
+        renderBulkPreview(bulkRows);
+    };
+    reader.readAsText(file);
+};
+
+const dz = document.getElementById('drop-zone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+dz.addEventListener('drop', e => {
+    e.preventDefault(); dz.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (!file || !file.name.endsWith('.csv')) { showToast('Solo archivos .csv','error'); return; }
+    const reader = new FileReader();
+    reader.onload = ev => { bulkRows = parseCSV(ev.target.result); if(bulkRows.length) renderBulkPreview(bulkRows); };
+    reader.readAsText(file);
+});
+
+document.getElementById('btn-bulk-clear').onclick = () => {
+    bulkRows = [];
+    document.getElementById('bulk-preview').style.display = 'none';
+    document.getElementById('csv-file').value = '';
+};
+
+async function createUser(row) {
+    const rol = VALID_ROLES.includes((row.rol||'').toLowerCase()) ? row.rol.toLowerCase() : 'gold';
+    const pass = row.password || Math.random().toString(36).slice(-10) + 'A1!';
+    const ar = await fetch(`${SB_URL}/auth/v1/admin/users`,{method:'POST',headers:HEADERS_SVC,
+        body:JSON.stringify({email:row.email.toLowerCase(),password:pass,email_confirm:true})});
+    if(!ar.ok){ const t=await ar.text(); throw new Error(t); }
+    const ad = await ar.json();
+    const payload = { id:ad.id, email:row.email.toLowerCase(), rol,
+        nombre:row.nombre||null, cargo:row.cargo||null, empresa:row.empresa||null, cuit:row.cuit||null };
+    const ir = await fetch(`${SB_URL}/rest/v1/usuarios`,{method:'POST',headers:{...HEADERS_SVC,Prefer:'return=minimal'},body:JSON.stringify(payload)});
+    if(!ir.ok){ const t=await ir.text(); throw new Error(t); }
+}
+
+document.getElementById('btn-bulk-import').onclick = async function() {
+    if (!bulkRows.length) return;
+    const btn = this; btn.disabled=true; btn.textContent='Importando…';
+    const bar = document.getElementById('progress-bar');
+    const fill = document.getElementById('progress-fill');
+    bar.style.display = 'block'; fill.style.width = '0%';
+    let ok=0, failed=0;
+    for (let i=0; i<bulkRows.length; i++) {
+        const statusEl = document.getElementById(`status-${i}`);
+        statusEl.className = 'row-status row-wait'; statusEl.textContent = 'Procesando…';
+        try {
+            await createUser(bulkRows[i]);
+            statusEl.className='row-status row-ok'; statusEl.textContent='✓ Creado';
+            ok++;
+        } catch(e) {
+            let msg = e.message;
+            try { msg = JSON.parse(msg).msg || msg; } catch {}
+            statusEl.className='row-status row-err';
+            statusEl.textContent = msg.includes('already registered') ? '✗ Ya existe' : ('✗ '+msg.slice(0,30));
+            failed++;
+        }
+        fill.style.width = `${Math.round((i+1)/bulkRows.length*100)}%`;
     }
-    btn.disabled = false;
-    btn.textContent = 'Guardar';
+    btn.disabled=false; btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Importar';
+    showToast(`Importación completa: ${ok} creados, ${failed} con error`);
+    document.getElementById('bulk-info').textContent = `Resultado: ${ok} creados, ${failed} con error`;
+    await loadUsers();
 };
 
 loadUsers();
