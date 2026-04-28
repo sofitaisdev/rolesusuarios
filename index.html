@@ -96,7 +96,6 @@
 
 <div id="toast" class="toast" style="display:none;"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
 const SB_URL = "https://mywtmrwjzwpwkctixnzi.supabase.co";
 const SB_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15d3Rtcndqendwd2tjdGl4bnppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5NTQ4NDYsImV4cCI6MjA4NzUzMDg0Nn0.jdA2J-YUuRqnqj5-4l7yxGn_VoOX6C5Jwvn7k4l_ZgA";
@@ -120,7 +119,7 @@ function showToast(msg, type = 'success') {
 
 async function loadUsers() {
     try {
-        const res = await fetch(`${SB_URL}/rest/v1/usuarios?select=*`, { headers: HEADERS });
+        const res = await fetch(`${SB_URL}/rest/v1/usuarios?select=*`, { headers: HEADERS_SVC });
         const data = await res.json();
         allUsers = Array.isArray(data) ? data : [];
         updateStats();
@@ -133,7 +132,7 @@ async function loadUsers() {
 function updateStats() {
     const counts = { diamond: 0, black: 0, platino: 0, ruby: 0, gold: 0, guest: 0 };
     for (const u of allUsers) {
-        const rol = u.rol || 'guest';
+        const rol = (u.rol || 'guest').toLowerCase();
         if (counts[rol] !== undefined) counts[rol]++;
         else counts.guest++;
     }
@@ -149,7 +148,7 @@ function renderTable() {
     
     let filtered = allUsers.filter(u => {
         const matchSearch = !search || (u.email || '').toLowerCase().includes(search) || (u.nombre || '').toLowerCase().includes(search);
-        const matchRol = !filterRol || (u.rol || 'guest') === filterRol;
+        const matchRol = !filterRol || (u.rol || 'guest').toLowerCase() === filterRol;
         return matchSearch && matchRol;
     });
     
@@ -182,12 +181,7 @@ function renderTable() {
 
 function escapeHtml(str) {
     if (!str) return '';
-    return str.replace(/[&<>]/g, function(m) {
-        if (m === '&') return '&amp;';
-        if (m === '<') return '&lt;';
-        if (m === '>') return '&gt;';
-        return m;
-    });
+    return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 }
 
 function openModal() {
@@ -201,12 +195,7 @@ function closeModal() {
     document.getElementById('pass-label').style.display = 'inline';
     document.getElementById('f-pass').placeholder = '';
     document.getElementById('f-email').disabled = false;
-    document.getElementById('f-email').value = '';
-    document.getElementById('f-pass').value = '';
-    document.getElementById('f-nombre').value = '';
-    document.getElementById('f-cargo').value = '';
-    document.getElementById('f-empresa').value = '';
-    document.getElementById('f-cuit').value = '';
+    ['f-email','f-pass','f-nombre','f-cargo','f-empresa','f-cuit'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('f-rol').value = 'gold';
     document.getElementById('modal-error').style.display = 'none';
 }
@@ -232,8 +221,9 @@ window.editUser = function(id) {
 window.deleteUser = async function(id, email) {
     if (!confirm(`¿Eliminar a ${email}?`)) return;
     try {
+        // Borra de auth primero, luego de la tabla
         await fetch(`${SB_URL}/auth/v1/admin/users/${id}`, { method: 'DELETE', headers: HEADERS_SVC });
-        await fetch(`${SB_URL}/rest/v1/usuarios?id=eq.${id}`, { method: 'DELETE', headers: HEADERS });
+        await fetch(`${SB_URL}/rest/v1/usuarios?id=eq.${id}`, { method: 'DELETE', headers: HEADERS_SVC });
         showToast('Usuario eliminado');
         await loadUsers();
     } catch (err) {
@@ -241,7 +231,7 @@ window.deleteUser = async function(id, email) {
     }
 };
 
-document.getElementById('btn-nuevo').onclick = () => { editingId = null; openModal(); };
+document.getElementById('btn-nuevo').onclick = () => { editingId = null; closeModal(); openModal(); };
 document.getElementById('btn-cancel').onclick = closeModal;
 document.getElementById('search').oninput = renderTable;
 document.getElementById('filter-rol').onchange = renderTable;
@@ -270,25 +260,44 @@ document.getElementById('btn-save').onclick = async function() {
         const payload = { rol, nombre, cargo, empresa, cuit };
         
         if (!editingId) {
+            // 1. Crear usuario en Supabase Auth
             const authRes = await fetch(`${SB_URL}/auth/v1/admin/users`, {
                 method: 'POST',
                 headers: HEADERS_SVC,
                 body: JSON.stringify({ email, password: pass, email_confirm: true })
             });
-            if (!authRes.ok) throw new Error(await authRes.text());
+            if (!authRes.ok) {
+                const errText = await authRes.text();
+                throw new Error(errText);
+            }
+
+            // 2. *** FIX: extraer el UUID del usuario recién creado ***
+            const authData = await authRes.json();
+            payload.id = authData.id;   // vincular el mismo UUID en la tabla usuarios
             payload.email = email;
-            await fetch(`${SB_URL}/rest/v1/usuarios`, {
+
+            // 3. Insertar en tabla usuarios con el mismo id
+            const insertRes = await fetch(`${SB_URL}/rest/v1/usuarios`, {
                 method: 'POST',
-                headers: { ...HEADERS, Prefer: 'return=minimal' },
+                headers: { ...HEADERS_SVC, Prefer: 'return=minimal' },
                 body: JSON.stringify(payload)
             });
+            if (!insertRes.ok) {
+                const errText = await insertRes.text();
+                throw new Error('Error al guardar perfil: ' + errText);
+            }
             showToast(`Usuario ${email} creado`);
+
         } else {
-            await fetch(`${SB_URL}/rest/v1/usuarios?id=eq.${editingId}`, {
+            // Actualizar datos en tabla usuarios
+            const updateRes = await fetch(`${SB_URL}/rest/v1/usuarios?id=eq.${editingId}`, {
                 method: 'PATCH',
-                headers: { ...HEADERS, Prefer: 'return=minimal' },
+                headers: { ...HEADERS_SVC, Prefer: 'return=minimal' },
                 body: JSON.stringify(payload)
             });
+            if (!updateRes.ok) throw new Error(await updateRes.text());
+
+            // Actualizar contraseña en auth si se ingresó una nueva
             if (pass) {
                 await fetch(`${SB_URL}/auth/v1/admin/users/${editingId}`, {
                     method: 'PUT',
@@ -298,12 +307,15 @@ document.getElementById('btn-save').onclick = async function() {
             }
             showToast('Usuario actualizado');
         }
+
         closeModal();
         await loadUsers();
+
     } catch (err) {
         errorDiv.textContent = err.message;
         errorDiv.style.display = 'block';
     }
+
     btn.disabled = false;
     btn.textContent = 'Guardar';
 };
